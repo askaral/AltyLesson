@@ -1,0 +1,30 @@
+select name, genre, published_year from books;
+select distinct country from authors;
+select * from books where published_year between date '2020-1-1' and date '2023-12-31';
+select name, genre from books where genre = 'DETECTIVE';
+select concat(first_name, ' ', last_name) as author from authors;
+select concat(first_name,' ', last_name) as full_name from authors where country = 'Germany' or  country = 'France'
+order by full_name;
+select name, country, published_year, price, genre from books where price<500 and genre not in('ROMANCE');
+select * from authors where gender = 'Female'  fetch first 3 rows only;
+select * from authors where gender = 'Female' and  email like '%.com' and length(first_name) = 4;
+select authors.country, count(first_name) from authors group by country;
+select authors.country, count(first_name) from authors  group by country having count(first_name) = 3 order by country;
+select genre, sum(price) from books group by genre order by sum(price) desc;
+select genre, min(price) from books where genre  in('ROMANCE', 'DETECTIVE') group by genre;
+select genre, count(genre) from books where genre in ('HISTORY','BIOGRAPHY') group by genre;
+select books.name, publishers.name, language from books join publishers on books.publisher_id = publishers.id
+join languages l on l.id = books.language_id order by l;
+select * , publishers.name from authors left join books b on authors.id = b.author_id
+left join publishers  on publishers.id = b.publisher_id;
+select first_name, last_name, books.name from authors left join books on authors.id = books.author_id;
+select language, count(books.name) as amount from languages join books on languages.id = books.language_id
+group by language order by amount;
+select publishers.name as pm, round(avg(price)) as average from publishers
+join books b on publishers.id = b.publisher_id  group by pm;
+select books.name, published_year, books.country , concat(first_name,'  ', last_name) as author_fill_name
+from books  join authors a on a.id = books.author_id where published_year
+between '2010-1-1' and '2015-12-31' order by published_year;
+select first_name, last_name, sum (price) as total from authors join books b on authors.id = b.author_id
+where published_year between '2010-1-1' and '2015-12-31'
+group by first_name, last_name order by total;
